@@ -1,6 +1,8 @@
 import configparser
 from os.path import dirname, exists, join
+
 from bot import ShrimpBot
+from timer import Timer
 
 CONFIG_FILE = join('..', 'config', 'config.ini')
 
@@ -11,5 +13,8 @@ else:
     raise FileNotFoundError('%s doesn\'t exists' % CONFIG_FILE)
 
 token = parser.get("Default", "token")
+
+timer = Timer()
 ShrimpBot().run(token)
-print(token)
+
+print("Run time - %dh : %dm : %ds" % timer.end())
