@@ -29,9 +29,14 @@ class ShrimpBot(discord.Client):
         await self.wait_until_ready()
 
         if not message.author.bot:
-            command = message.content.lower()
+            contents = message.content.lower().split()
 
-            func = getattr(self, "command_%s" % find_command(command.split()[0]), None)
+            try:
+                command = contents[1 if contents[0]==self.prefix else 0]
+            except IndexError:
+                func = getattr(self, "command_ping")
+            else:
+                func = getattr(self, "command_%s" % find_command(command), None)
 
             if func:
                 await func(message)
