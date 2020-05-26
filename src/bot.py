@@ -36,11 +36,13 @@ class ShrimpBot(discord.Client):
             contents = message.content.lower().split()
 
             try:
-                prefixed = 1 if contents[0]==self.prefix else 0
-                command = contents[prefixed]
+                prefixed = 1 if contents[0]==self.prefix and len(contents) > 1 else 0
             except IndexError:
-                func = getattr(self, "command_ping")
+                #이미지는 메시지로 인식하지 않음
+                func = None
             else:
+                command = contents[prefixed]
+
                 func = getattr(self, "command_%s" % find_command(command, prefixed=prefixed), None)
 
             if func:

@@ -6,6 +6,6 @@ class Constants:
     }
 
     command = {
-        'ping' : ['안녕', 'ㅎㅇ'],
+        'ping' : ['안녕', 'ㅎㅇ', '새우야'],
         'hungry' : ['배고파', 'qorhvk', 'hungry', 'ㅗㅕㅜㅎ교', '헝그리', 'gjdrmfl'],
     }
