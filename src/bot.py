@@ -6,8 +6,10 @@ from const import Constants
 
 weekday_kor = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
 
-def find_command(message):
-    for command, shorts in Constants.command.items():
+def find_command(message, prefixed=True):
+    dictionary = getattr(Constants, 'prefixed_command' if prefixed else 'command')
+
+    for command, shorts in dictionary.items():
         if message in shorts:
             return command
 
@@ -34,11 +36,12 @@ class ShrimpBot(discord.Client):
             contents = message.content.lower().split()
 
             try:
-                command = contents[1 if contents[0]==self.prefix else 0]
+                prefixed = 1 if contents[0]==self.prefix else 0
+                command = contents[prefixed]
             except IndexError:
                 func = getattr(self, "command_ping")
             else:
-                func = getattr(self, "command_%s" % find_command(command), None)
+                func = getattr(self, "command_%s" % find_command(command, prefixed=prefixed), None)
 
             if func:
                 await func(message)
