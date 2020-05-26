@@ -2,7 +2,7 @@ import configparser
 from os.path import dirname, exists, join
 
 from bot import ShrimpBot
-from timer import Timer
+from utils import Timer
 
 CONFIG_FILE = join('..', 'config', 'config.ini')
 

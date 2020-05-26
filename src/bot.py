@@ -1,7 +1,7 @@
 import discord
 import asyncio
 
-from crawler import TimeCalc, MenuParser
+from utils import TimeCalc, MenuParser
 from const import Constants
 
 weekday_kor = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
