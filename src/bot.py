@@ -1,4 +1,6 @@
 import discord
+import asyncio
+
 from crawler import TimeCalc, MenuParser
 from const import Constants
 
@@ -65,3 +67,28 @@ class ShrimpBot(discord.Client):
         )
 
         await message.channel.send(embed=em)
+
+
+    async def command_invite_link(self, message):
+        await message.channel.trigger_typing()
+
+        link = discord.utils.oauth_url(
+            (await self.application_info()).id,
+            permissions=discord.Permissions(8)
+        )
+
+        em = discord.Embed(
+            title="§§§ 새우 봇 초대 링크 §§§",
+            description="새우 봇을 초대해 보세요!",
+            url=link,
+            colour=self.color
+        )
+
+        content = await message.channel.send(embed=em)
+        await asyncio.sleep(15)
+
+        try:
+            await content.delete()
+            await message.channel.send("새우가 도망갔어요!")
+        except discord.errors.NotFound:
+            pass
