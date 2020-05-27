@@ -28,11 +28,11 @@ class MenuParser:
     def __init__(self):
         self.api = SchoolAPI(SchoolAPI.Region.GWANGJU, 'F100000120')
 
-    def get_next_meal(self):
+    async def get_next_meal(self):
         meal = ["breakfast", "lunch", "dinner"]
 
         year, month, day, weekday, time = TimeCalc.get_next_time()
-        menu = getattr(self.api.get_monthly_menus(year, month)[day], meal[time])
+        menu = getattr((await self.api.get_monthly_menus_async(year, month))[day], meal[time])
         result = "\n".join(["- %s" % item for item in menu])
         
         return result
