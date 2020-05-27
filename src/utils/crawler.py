@@ -33,8 +33,12 @@ class MenuParser:
 
         year, month, day, weekday, time = TimeCalc.get_next_time()
         menu = getattr((await self.api.get_monthly_menus_async(year, month))[day], meal[time])
-        result = "\n".join(["- %s" % item for item in menu])
         
+        if menu:
+            result = "\n".join(["- %s" % item for item in menu])
+        else:
+            result = '급식 정보를 불러올 수 없습니다.'
+
         return result
 
 if __name__ == '__main__':
