@@ -90,7 +90,7 @@ class ShrimpBot(discord.Client):
             ['아침', '점심', '저녁'][time]
         )
 
-        menu = await self.meal_parser.get_next_meal()
+        menu = self.meal_parser.get_next_meal()
 
         em = discord.Embed(
             title=title,
