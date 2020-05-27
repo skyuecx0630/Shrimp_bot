@@ -2,7 +2,7 @@ import discord
 import asyncio
 
 from utils import TimeCalc, MenuParser
-from const import Constants
+from const import Constants, Docs
 
 weekday_kor = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
 
@@ -50,7 +50,34 @@ class ShrimpBot(discord.Client):
 
 
     async def command_ping(self, message):
-        await message.channel.send('안녕!')
+        await message.channel.send('안녕! :wave:')
+
+
+    async def command_help(self, message):
+        await message.channel.trigger_typing()
+
+        contents = message.content.lower().split()
+        title = '새우 봇 도움말'
+
+        try:
+            doc = getattr(Docs, "%s" % find_command(contents[2]), None)
+            
+            if doc:
+                title += ' - %s' % contents[2]
+
+            else:
+                doc = '그런 명령어는 없네요 :('
+
+        except IndexError:
+            doc = getattr(Docs, 'helps')
+
+        em = discord.Embed(
+            title=title,
+            description=doc,
+            colour=self.color
+        )
+
+        await message.channel.send(embed=em)
 
 
     async def command_hungry(self, message):
