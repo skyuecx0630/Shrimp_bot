@@ -3,6 +3,10 @@ import asyncio
 
 from utils import TimeCalc, MenuParser
 from const import Constants, Docs
+from db_manager import DBManager
+
+from models import Custom_commands
+
 
 weekday_kor = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
 
@@ -19,6 +23,7 @@ class ShrimpBot(discord.Client):
         self.prefix = '새우야'
         self.color = 0xFF421A
         self.meal_parser = MenuParser()
+        self.db_manager = DBManager()
 
         super().__init__()
 
@@ -124,3 +129,54 @@ class ShrimpBot(discord.Client):
             await message.channel.send("새우가 도망갔어요!")
         except discord.errors.NotFound:
             pass
+
+
+    async def command_custom(self, message):
+        contents = message.content.split()
+
+        features = {'추가' : '_add', '삭제' : '_delete'}
+
+        try:
+            getattr(self, 'custom' + features[contents[2]])(message)
+
+        except IndexError:
+            doc = getattr(Docs, 'custom')
+
+            em = discord.Embed(
+                title='새우 봇 도움말 - 커스텀',
+                description=doc,
+                colour=self.color
+            )
+            
+            await message.channel.send('올바른 명령어가 아닙니다!', embed=em)
+
+
+    async def command_custom_add(self, message, prefixed=False):
+        await message.channel.trigger_typing()
+
+        contents = message.content.split()
+        command_index = 3 if prefixed else 1
+        
+        try:
+            command = contents[command_index]
+            output = " ".join(contents[command_index + 1:])
+        
+        except IndexError:
+            doc = getattr(Docs, 'custom')
+
+            em = discord.Embed(
+                title='새우 봇 도움말 - 커스텀',
+                description=doc,
+                colour=self.color
+            )
+            
+            await message.channel.send('올바른 명령어가 아닙니다!', embed=em)
+        
+        else:
+            server = str(message.guild.id)
+            custom = Custom_commands(server, command, output)
+
+            self.db_manager.insert_row(custom)
+
+            print(custom)
+            await message.channel.send('알겠습니다! :ok_hand:')
