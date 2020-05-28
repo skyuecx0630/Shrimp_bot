@@ -1,5 +1,6 @@
 import discord
 import asyncio
+from random import randint
 
 from utils import TimeCalc, MenuParser
 from const import Constants, Docs
@@ -44,14 +45,17 @@ class ShrimpBot(discord.Client):
                 prefixed = 1 if contents[0]==self.prefix and len(contents) > 1 else 0
             except IndexError:
                 #이미지는 메시지로 인식하지 않음
-                func = None
-            else:
-                command = contents[prefixed]
+                return
+        
+            command = contents[prefixed]
 
-                func = getattr(self, "command_%s" % find_command(command, prefixed=prefixed), None)
+            func = getattr(self, "command_%s" % find_command(command, prefixed=prefixed), None)
 
             if func:
                 await func(message)
+            
+            else:
+                await self.command_custom_show(message)
 
 
     async def command_ping(self, message):
@@ -137,7 +141,7 @@ class ShrimpBot(discord.Client):
         features = {'추가' : '_add', '삭제' : '_delete'}
 
         try:
-            getattr(self, 'custom' + features[contents[2]])(message)
+            getattr(self, 'command_custom' + features[contents[2]])(message)
 
         except IndexError:
             doc = getattr(Docs, 'custom')
@@ -180,3 +184,20 @@ class ShrimpBot(discord.Client):
             self.db_manager.insert_row(custom)
 
             await message.channel.send('알겠습니다! :ok_hand:')
+
+
+    async def command_custom_show(self, message):
+        contents = message.content.split()
+
+        searched = self.db_manager.search_row(Custom_commands, 'command', contents[0])
+
+        if not searched:
+            return
+
+        server = str(message.guild.id)
+        server_commands = [command for command in searched if command.server == server]
+
+        if server_commands:
+            selected = server_commands[randint(0, len(server_commands) - 1)]
+        
+            await message.channel.send(selected.output)
