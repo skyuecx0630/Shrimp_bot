@@ -174,9 +174,9 @@ class ShrimpBot(discord.Client):
         
         else:
             server = str(message.guild.id)
-            custom = Custom_commands(server, command, output)
+            author = str(message.author.id)
+            custom = Custom_commands(server, author, command, output)
 
             self.db_manager.insert_row(custom)
 
-            print(custom)
             await message.channel.send('알겠습니다! :ok_hand:')
