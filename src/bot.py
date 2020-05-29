@@ -156,15 +156,17 @@ class ShrimpBot(discord.Client):
 
 
     async def command_custom_add(self, message, prefixed=False):
-        await message.channel.trigger_typing()
-
         contents = message.content.split()
         command_index = 3 if prefixed else 1
         
         try:
             command = contents[command_index]
             output = " ".join(contents[command_index + 1:])
-        
+            
+            if find_command(command, prefixed=False):
+                await message.add_reaction('\U0001F6AB')
+                return
+
         except IndexError:
             doc = getattr(Docs, 'custom')
 
@@ -211,7 +213,7 @@ class ShrimpBot(discord.Client):
         searched = self.db_manager.search_row(Custom_commands, 'command', contents[command_index])
         
         if not searched:
-            return
+            await message.add_reaction('\U00002753')
 
         server = str(message.guild.id)
         server_commands = [command for command in searched if command.server == server]
