@@ -183,7 +183,7 @@ class ShrimpBot(discord.Client):
 
             self.db_manager.insert_row(custom)
 
-            await message.channel.send('알겠습니다! :ok_hand:')
+            await message.add_reaction("\U0001F44C")
 
 
     async def command_custom_show(self, message):
@@ -220,4 +220,4 @@ class ShrimpBot(discord.Client):
             for command in server_commands:
                 self.db_manager.delete_row(command)
 
-            await message.channel.send('알겠습니다! :ok_hand:')
+            await message.add_reaction("\U0001F44C")
