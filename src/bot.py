@@ -141,7 +141,7 @@ class ShrimpBot(discord.Client):
         features = {'추가' : '_add', '삭제' : '_delete'}
 
         try:
-            getattr(self, 'command_custom' + features[contents[2]])(message)
+            await getattr(self, 'command_custom' + features[contents[2]])(message, prefixed=True)
 
         except IndexError:
             doc = getattr(Docs, 'custom')
@@ -201,3 +201,23 @@ class ShrimpBot(discord.Client):
             selected = server_commands[randint(0, len(server_commands) - 1)]
         
             await message.channel.send(selected.output)
+
+
+    async def command_custom_delete(self, message, prefixed=False):
+        contents = message.content.split()
+
+        command_index = 3 if prefixed else 1
+
+        searched = self.db_manager.search_row(Custom_commands, 'command', contents[command_index])
+        
+        if not searched:
+            return
+
+        server = str(message.guild.id)
+        server_commands = [command for command in searched if command.server == server]
+
+        if server_commands:
+            for command in server_commands:
+                self.db_manager.delete_row(command)
+
+            await message.channel.send('알겠습니다! :ok_hand:')

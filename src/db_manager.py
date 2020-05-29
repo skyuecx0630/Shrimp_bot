@@ -29,6 +29,11 @@ class DBManager:
         query = self.session.query(table).filter(key == (data))
         return query.all()
 
+    def delete_row(self, data):
+        self.session.delete(data)
+        self.session.commit()
+
+
 if __name__ == '__main__':
     m = DBManager()
     data = Custom_commands(5, 'com', 'out')
