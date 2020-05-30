@@ -163,6 +163,9 @@ class ShrimpBot(discord.Client):
             command = contents[command_index]
             output = " ".join(contents[command_index + 1:])
             
+            if not output:
+                raise IndexError
+            
             if find_command(command, prefixed=False):
                 await message.add_reaction('\U0001F6AB')
                 return
