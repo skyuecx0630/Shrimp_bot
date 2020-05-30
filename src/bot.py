@@ -62,23 +62,31 @@ class ShrimpBot(discord.Client):
         await message.channel.send('안녕! :wave:')
 
 
-    async def command_help(self, message):
+    async def command_help(self, message, command=None):
         await message.channel.trigger_typing()
+
+        msg = "<@!%d>" % message.author.id
 
         contents = message.content.lower().split()
         title = '새우 봇 도움말'
 
-        try:
-            doc = getattr(Docs, "%s" % find_command(contents[2]), None)
-            
-            if doc:
-                title += ' - %s' % contents[2]
+        if command:
+            doc = getattr(Docs, find_command(command), None)
+            title += ' - %s' % command
+            msg += ' 올바른 명령어가 아닙니다!'
 
-            else:
-                doc = '그런 명령어는 없네요 :('
+        else:
+            try:
+                doc = getattr(Docs, find_command(contents[2]), None)
+                
+                if doc:
+                    title += ' - %s' % contents[2]
 
-        except IndexError:
-            doc = getattr(Docs, 'helps')
+                else:
+                    doc = '그런 명령어는 없네요 :('
+
+            except IndexError:
+                doc = getattr(Docs, 'helps')
 
         em = discord.Embed(
             title=title,
@@ -86,7 +94,7 @@ class ShrimpBot(discord.Client):
             colour=self.color
         )
 
-        await message.channel.send(embed=em)
+        await message.channel.send(msg, embed=em)
 
 
     async def command_hungry(self, message):
@@ -144,15 +152,7 @@ class ShrimpBot(discord.Client):
             await getattr(self, 'command_custom' + features[contents[2]])(message, prefixed=True)
 
         except IndexError:
-            doc = getattr(Docs, 'custom')
-
-            em = discord.Embed(
-                title='새우 봇 도움말 - 커스텀',
-                description=doc,
-                colour=self.color
-            )
-            
-            await message.channel.send('올바른 명령어가 아닙니다!', embed=em)
+            await self.command_help(message, command='커맨드')
 
 
     async def command_custom_add(self, message, prefixed=False):
@@ -171,16 +171,8 @@ class ShrimpBot(discord.Client):
                 return
 
         except IndexError:
-            doc = getattr(Docs, 'custom')
+            await self.command_help(message, command='커맨드')
 
-            em = discord.Embed(
-                title='새우 봇 도움말 - 커스텀',
-                description=doc,
-                colour=self.color
-            )
-            
-            await message.channel.send('올바른 명령어가 아닙니다!', embed=em)
-        
         else:
             server = str(message.guild.id)
             author = str(message.author.id)
@@ -212,17 +204,21 @@ class ShrimpBot(discord.Client):
         contents = message.content.split()
 
         command_index = 3 if prefixed else 1
-
-        searched = self.db_manager.search_row(Custom_commands, 'command', contents[command_index])
+        try:
+            searched = self.db_manager.search_row(Custom_commands, 'command', contents[command_index])
         
-        if not searched:
-            await message.add_reaction('\U00002753')
+        except IndexError:
+            await self.command_help(message, command='커맨드')
 
-        server = str(message.guild.id)
-        server_commands = [command for command in searched if command.server == server]
+        else:
+            if not searched:
+                await message.add_reaction('\U00002753')
 
-        if server_commands:
-            for command in server_commands:
-                self.db_manager.delete_row(command)
+            server = str(message.guild.id)
+            server_commands = [command for command in searched if command.server == server]
 
-            await message.add_reaction("\U0001F44C")
+            if server_commands:
+                for command in server_commands:
+                    self.db_manager.delete_row(command)
+
+                await message.add_reaction("\U0001F44C")
