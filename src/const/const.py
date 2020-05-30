@@ -12,4 +12,5 @@ class Constants:
         'hungry' : ['배고파', 'qorhvk', 'hungry', 'ㅗㅕㅜㅎ교', '헝그리', 'gjdrmfl'],
         'custom_add' : ['새커추'],
         'custom_delete' : ['새커삭'],
+        'custom_list' : ['새커목']
     }

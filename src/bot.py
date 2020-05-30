@@ -146,12 +146,12 @@ class ShrimpBot(discord.Client):
     async def command_custom(self, message):
         contents = message.content.split()
 
-        features = {'추가' : '_add', '삭제' : '_delete'}
+        features = {'추가' : '_add', '삭제' : '_delete', '목록' : '_list'}
 
         try:
             await getattr(self, 'command_custom' + features[contents[2]])(message, prefixed=True)
 
-        except IndexError:
+        except (IndexError, KeyError):
             await self.command_help(message, command='커맨드')
 
 
@@ -222,3 +222,33 @@ class ShrimpBot(discord.Client):
                     self.db_manager.delete_row(command)
 
                 await message.add_reaction("\U0001F44C")
+
+
+    async def command_custom_list(self, message, prefixed=False):
+        await message.channel.trigger_typing()
+
+        server = str(message.guild.id)
+        searched = self.db_manager.search_row(Custom_commands, 'server', server)
+
+        if not searched:
+            await message.channel.send('이 서버엔 추가된 커맨드가 없네요!')
+            return
+
+        command_dict = {}
+
+        for custom in searched:
+            if custom.command in command_dict:
+                command_dict[custom.command] += 1
+            else:
+                command_dict[custom.command] = 1
+        
+        title = "%s의 커맨드 목록" % message.guild.name
+        description = "\n".join(["`%s`" % command for command in command_dict])
+
+        em = discord.Embed(
+            title=title,
+            description=description,
+            colour=self.color
+        )
+
+        await message.channel.send(embed=em)
