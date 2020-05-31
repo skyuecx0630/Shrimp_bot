@@ -133,12 +133,11 @@ class ShrimpBot(discord.Client):
             colour=self.color
         )
 
-        content = await message.channel.send(embed=em)
+        msg = await message.channel.send(embed=em)
         await asyncio.sleep(15)
 
         try:
-            await content.delete()
-            await message.channel.send("새우가 도망갔어요!")
+            await msg.edit(content="새우가 도망갔어요!", suppress=True)
         except discord.errors.NotFound:
             pass
 
