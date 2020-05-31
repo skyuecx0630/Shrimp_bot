@@ -1,6 +1,6 @@
 import discord
 import asyncio
-from random import randint
+from random import choice
 
 from utils import TimeCalc, MenuParser
 from const import Constants, Docs
@@ -187,14 +187,11 @@ class ShrimpBot(discord.Client):
 
         searched = self.db_manager.search_row(Custom_commands, 'command', contents[0])
 
-        if not searched:
-            return
-
         server = str(message.guild.id)
         server_commands = [command for command in searched if command.server == server]
 
         if server_commands:
-            selected = server_commands[randint(0, len(server_commands) - 1)]
+            selected = choice(server_commands)
         
             await message.channel.send(selected.output)
 
