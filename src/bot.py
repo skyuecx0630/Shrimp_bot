@@ -28,6 +28,12 @@ def admin_only(func):
             return await func(self, message)
     return wrapper
 
+def guild_only(func):
+    async def wrapper(self, message, prefixed=False):
+        if message.guild:
+            return await func(self, message, prefixed)
+    return wrapper
+
 class ShrimpBot(discord.Client):
     def __init__ (self, admin):
         self.prefix = '새우야'
@@ -164,6 +170,7 @@ class ShrimpBot(discord.Client):
             await self.command_help(message, command='커맨드')
 
 
+    @guild_only
     async def command_custom_add(self, message, prefixed=False):
         contents = message.content.split()
         command_index = 3 if prefixed else 1
@@ -192,6 +199,7 @@ class ShrimpBot(discord.Client):
             await message.add_reaction("\U0001F44C")
 
 
+    @guild_only
     async def command_custom_show(self, message):
         contents = message.content.split()
 
@@ -206,6 +214,7 @@ class ShrimpBot(discord.Client):
             await message.channel.send(selected.output)
 
 
+    @guild_only
     async def command_custom_delete(self, message, prefixed=False):
         contents = message.content.split()
 
@@ -230,6 +239,7 @@ class ShrimpBot(discord.Client):
                 await message.add_reaction("\U0001F44C")
 
 
+    @guild_only
     async def command_custom_list(self, message, prefixed=False):
         await message.channel.trigger_typing()
 
