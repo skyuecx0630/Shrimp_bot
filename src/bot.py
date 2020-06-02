@@ -1,6 +1,7 @@
 import discord
 import asyncio
 import os
+from subprocess import Popen
 from random import choice
 
 from utils import TimeCalc, MenuParser
@@ -271,14 +272,6 @@ class ShrimpBot(discord.Client):
 
 
     @admin_only
-    async def command_system_reboot(self, message):
-        await message.channel.send(':ok_hand:')
-        
-        if os.name == 'posix':
-            os.system('sudo reboot')
-
-
-    @admin_only
     async def command_get_update(self, message):
         if os.name == 'posix':
             os.chdir(Settings.SRC_DIRECTORY)
@@ -292,3 +285,11 @@ class ShrimpBot(discord.Client):
             
             await message.author.send(embed=em)
     
+
+    @admin_only
+    async def command_restart_bot(self, message):
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        file = os.path.join(BASE_DIR , 'run.py')
+        python = 'python3' if os.name == 'posix' else 'python'
+        Popen([python, file])
+        exit()
