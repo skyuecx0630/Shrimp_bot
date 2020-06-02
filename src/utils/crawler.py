@@ -1,9 +1,10 @@
 from schapi import SchoolAPI
 from datetime import datetime, timedelta
+from pytz import timezone
 
 class TimeCalc:
     @staticmethod
-    def get_next_time(now=datetime.now()):
+    def get_next_time(now=datetime.now(timezone('Asia/Seoul'))):
         """다음으로 조회할 급식의 시간을 반환합니다.
 
         :param now: 조회할 시간
