@@ -1,8 +1,8 @@
 from bot import ShrimpBot
 from utils import Timer
-from const import Token
+from const import Settings
 
 timer = Timer()
-ShrimpBot().run(Token.token)
+ShrimpBot().run(Settings.token)
 
 print("Run time - %dh : %dm : %ds" % timer.end())

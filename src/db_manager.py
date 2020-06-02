@@ -5,12 +5,12 @@ from sqlalchemy.ext.declarative import declarative_base
 from os.path import join, exists
 from models import Custom_commands
 
-from const import Databases
+from const import Settings
 
 
 class DBManager:
     def __init__(self):
-        engine = create_engine(Databases.local)
+        engine = create_engine(Settings.database)
 
         from models import Base
         Base.metadata.create_all(engine)
