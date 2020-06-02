@@ -1,9 +1,10 @@
 import discord
 import asyncio
+import os
 from random import choice
 
 from utils import TimeCalc, MenuParser
-from const import Constants, Docs
+from const import Constants, Docs, Strings, Settings
 from db_manager import DBManager
 
 from models import Custom_commands
@@ -18,11 +19,20 @@ def find_command(message, prefixed=True):
         if message in shorts:
             return command
 
+def admin_only(func):
+    async def wrapper(self, message):
+        if message.author.id not in self.admin:
+            await message.channel.send(Strings.ADMIN_ONLY)
+            return
+        else:
+            return await func(self, message)
+    return wrapper
 
 class ShrimpBot(discord.Client):
-    def __init__ (self):
+    def __init__ (self, admin):
         self.prefix = '새우야'
         self.color = 0xFF421A
+        self.admin = admin
         self.meal_parser = MenuParser()
         self.db_manager = DBManager()
 
@@ -248,3 +258,27 @@ class ShrimpBot(discord.Client):
         )
 
         await message.channel.send(embed=em)
+
+
+    @admin_only
+    async def command_system_reboot(self, message):
+        await message.channel.send(':ok_hand:')
+        
+        if os.name == 'posix':
+            os.system('sudo reboot')
+
+
+    @admin_only
+    async def command_get_update(self, message):
+        if os.name == 'posix':
+            os.chdir(Settings.SRC_DIRECTORY)
+            data = os.popen('git pull origin master').read()
+            
+            em = discord.Embed(
+                title='명령어 실행 결과!',
+                description = data,
+                colour = self.color
+            )
+            
+            await message.author.send(embed=em)
+    

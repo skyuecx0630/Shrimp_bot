@@ -5,6 +5,8 @@ class Constants:
         'invite_link' : ['초대'],
         'help' : ['help', '도움말', '명령어'],
         'custom' : ['커맨드', '커스텀'],
+        'system_reboot' : ['재시작'],
+        'get_update' : ['업데이트'],
     }
 
     command = {
@@ -14,3 +16,6 @@ class Constants:
         'custom_delete' : ['새커삭'],
         'custom_list' : ['새커목']
     }
+
+class Strings:
+    ADMIN_ONLY = '이 기능은 봇 관리자만 사용할 수 있습니다!'

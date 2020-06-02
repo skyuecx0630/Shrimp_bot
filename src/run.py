@@ -3,6 +3,6 @@ from utils import Timer
 from const import Settings
 
 timer = Timer()
-ShrimpBot().run(Settings.token)
+ShrimpBot(Settings.Admins).run(Settings.token)
 
 print("Run time - %dh : %dm : %ds" % timer.end())
