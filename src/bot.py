@@ -200,7 +200,6 @@ class ShrimpBot(discord.Client):
             await message.add_reaction("\U0001F44C")
 
 
-    @guild_only
     async def command_custom_show(self, message):
         contents = message.content.split()
 
