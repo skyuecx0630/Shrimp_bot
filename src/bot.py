@@ -1,7 +1,7 @@
 import discord
 import asyncio
 import os
-from subprocess import Popen
+from subprocess import Popen, check_output
 from random import choice
 
 from utils import TimeCalc, MenuParser
@@ -273,17 +273,16 @@ class ShrimpBot(discord.Client):
 
     @admin_only
     async def command_get_update(self, message):
-        if os.name == 'posix':
-            os.chdir(Settings.SRC_DIRECTORY)
-            data = os.popen('git pull origin master').read()
-            
-            em = discord.Embed(
-                title='명령어 실행 결과!',
-                description = data,
-                colour = self.color
-            )
-            
-            await message.author.send(embed=em)
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        result = check_output(['git', 'pull', 'origin', 'master'], cwd=BASE_DIR).decode('utf-8')
+
+        em = discord.Embed(
+            title='명령어 실행 결과!',
+            description=result,
+            colour=self.color
+        )
+        
+        await message.author.send(embed=em)
     
 
     @admin_only
