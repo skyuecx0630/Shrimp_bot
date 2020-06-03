@@ -288,6 +288,9 @@ class ShrimpBot(discord.Client):
     async def command_restart_bot(self, message):
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         file = os.path.join(BASE_DIR , 'run.py')
+        
         python = 'python3' if os.name == 'posix' else 'python'
         Popen([python, file])
+
+        await message.add_reaction("\U0001F44C")
         exit()
