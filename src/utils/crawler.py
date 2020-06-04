@@ -31,9 +31,9 @@ class MenuParser:
 
     def get_next_meal(self):
         meal = ["breakfast", "lunch", "dinner"]
-        time = datetime.now(timezone('Asia/Seoul'))
+        now = datetime.now(timezone('Asia/Seoul'))
 
-        year, month, day, weekday, time = TimeCalc.get_next_time(time)
+        year, month, day, weekday, time = TimeCalc.get_next_time(now)
         menu = getattr(self.api.get_monthly_menus(year, month)[day], meal[time])
         
         if menu:
