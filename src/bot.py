@@ -273,7 +273,7 @@ class ShrimpBot(discord.Client):
     @admin_only
     async def command_get_update(self, message):
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        result = check_output(['git', 'pull', 'origin', 'master'], cwd=BASE_DIR).decode('utf-8')
+        result = check_output(['git', 'pull', 'origin', '+master'], cwd=BASE_DIR).decode('utf-8')
 
         em = discord.Embed(
             title='명령어 실행 결과!',
