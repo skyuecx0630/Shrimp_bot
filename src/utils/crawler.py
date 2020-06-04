@@ -4,7 +4,7 @@ from pytz import timezone
 
 class TimeCalc:
     @staticmethod
-    def get_next_time(now=datetime.now(timezone('Asia/Seoul'))):
+    def get_next_time(now):
         """다음으로 조회할 급식의 시간을 반환합니다.
 
         :param now: 조회할 시간
@@ -31,8 +31,9 @@ class MenuParser:
 
     def get_next_meal(self):
         meal = ["breakfast", "lunch", "dinner"]
+        time = datetime.now(timezone('Asia/Seoul'))
 
-        year, month, day, weekday, time = TimeCalc.get_next_time()
+        year, month, day, weekday, time = TimeCalc.get_next_time(time)
         menu = getattr(self.api.get_monthly_menus(year, month)[day], meal[time])
         
         if menu:
