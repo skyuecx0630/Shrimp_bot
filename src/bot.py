@@ -40,9 +40,12 @@ class ShrimpBot(discord.Client):
         self.prefix = '새우야'
         self.color = 0xFF421A
         self.admin = admin
+        self.BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
         self.meal_parser = MenuParser()
         self.db_manager = DBManager()
         self.logger = logger
+
 
         super().__init__()
 
@@ -273,8 +276,7 @@ class ShrimpBot(discord.Client):
 
     @admin_only
     async def command_get_update(self, message):
-        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        result = check_output(['git', 'pull', 'origin', '+master'], cwd=BASE_DIR).decode('utf-8')
+        result = check_output(['git', 'pull', 'origin', '+master'], cwd=self.BASE_DIR).decode('utf-8')
 
         em = discord.Embed(
             title='명령어 실행 결과!',
@@ -287,11 +289,31 @@ class ShrimpBot(discord.Client):
 
     @admin_only
     async def command_restart_bot(self, message):
-        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        file = os.path.join(BASE_DIR , 'run.py')
+        file = os.path.join(self.BASE_DIR , 'run.py')
         
         python = 'python3' if os.name == 'posix' else 'python'
         Popen([python, file])
 
         await message.add_reaction("\U0001F44C")
         exit()
+
+
+    @admin_only
+    async def command_get_log(self, message):
+        contents = message.content.split()
+        
+        log_request = int(contents[2]) if len(contents) > 2 else 10
+        
+        log_path = os.path.join(self.BASE_DIR, 'shrimp_bot.log')
+        with open(log_path, 'r', encoding='utf-8') as f:
+            log = f.readlines()[::-1]
+            
+            result = "".join(log[:log_request][::-1])
+
+        em = discord.Embed(
+            title='명령어 실행 결과!',
+            description=result,
+            colour=self.color
+        )
+
+        await message.author.send(embed=em)
