@@ -36,12 +36,13 @@ def guild_only(func):
     return wrapper
 
 class ShrimpBot(discord.Client):
-    def __init__ (self, admin):
+    def __init__ (self, admin, logger):
         self.prefix = '새우야'
         self.color = 0xFF421A
         self.admin = admin
         self.meal_parser = MenuParser()
         self.db_manager = DBManager()
+        self.logger = logger
 
         super().__init__()
 
@@ -49,7 +50,7 @@ class ShrimpBot(discord.Client):
     async def on_ready(self):
         activity = discord.Activity(name='명령어: 새우야', type=discord.ActivityType.playing)
         await self.change_presence(activity=activity)
-        print('Bot Started!')
+        self.logger.info('Bot Started!')
     
 
     async def on_message(self, message):
