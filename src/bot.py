@@ -21,18 +21,18 @@ def find_command(message, prefixed=True):
             return command
 
 def admin_only(func):
-    async def wrapper(self, message):
+    async def wrapper(self, message, *args, **kwargs):
         if message.author.id not in self.admin:
             await message.channel.send(Strings.ADMIN_ONLY)
             return
         else:
-            return await func(self, message)
+            return await func(self, message, *args, **kwargs)
     return wrapper
 
 def guild_only(func):
-    async def wrapper(self, message, prefixed=False):
+    async def wrapper(self, message, *args, **kwargs):
         if message.guild:
-            return await func(self, message, prefixed)
+            return await func(self, message, *args, **kwargs)
     return wrapper
 
 class ShrimpBot(discord.Client):
@@ -204,6 +204,7 @@ class ShrimpBot(discord.Client):
             await message.add_reaction("\U0001F44C")
 
 
+    @guild_only
     async def command_custom_show(self, message):
         contents = message.content.split()
 
@@ -284,6 +285,7 @@ class ShrimpBot(discord.Client):
             colour=self.color
         )
         
+        self.logger.info('Pulling updates...')
         await message.author.send(embed=em)
     
 
@@ -295,6 +297,7 @@ class ShrimpBot(discord.Client):
         Popen([python, file])
 
         await message.add_reaction("\U0001F44C")
+        self.logger.info('Restarting bot...')
         exit()
 
 
