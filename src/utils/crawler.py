@@ -2,6 +2,7 @@ from schapi import SchoolAPI
 from datetime import datetime, timedelta
 from pytz import timezone
 
+
 class TimeCalc:
     @staticmethod
     def get_next_time(now=None):
@@ -13,7 +14,7 @@ class TimeCalc:
         :rtype: tuple
         """
         if now is None:
-            now = datetime.now(timezone('Asia/Seoul'))
+            now = datetime.now(timezone("Asia/Seoul"))
 
         # 아침, 점심, 저녁 시간
         meal_time = [510, 810, 1170]
@@ -21,31 +22,32 @@ class TimeCalc:
         for i in range(len(meal_time)):
             if (now.hour * 60 + now.minute) < meal_time[i]:
                 return (now.year, now.month, now.day, now.weekday(), i)
-        
-        #금요일이면 다음날을 월요일로
-        now += timedelta(days=3 if now.weekday==4 else 1)
-    
+
+        # 금요일이면 다음날을 월요일로
+        now += timedelta(days=3 if now.weekday == 4 else 1)
+
         return (now.year, now.month, now.day, now.weekday(), 0)
 
 
 class MenuParser:
     def __init__(self):
-        self.api = SchoolAPI(SchoolAPI.Region.GWANGJU, 'F100000120')
+        self.api = SchoolAPI(SchoolAPI.Region.GWANGJU, "F100000120")
 
     def get_next_meal(self):
         meal = ["breakfast", "lunch", "dinner"]
 
         year, month, day, weekday, time = TimeCalc.get_next_time()
         menu = getattr(self.api.get_monthly_menus(year, month)[day], meal[time])
-    
+
         if menu:
             result = "\n".join(["- %s" % item for item in menu])
 
         else:
-            result = '급식 정보를 불러올 수 없습니다.'
+            result = "급식 정보를 불러올 수 없습니다."
 
         return result
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     p = MenuParser()
     print(p.get_next_meal())
