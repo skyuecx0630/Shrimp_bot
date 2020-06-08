@@ -1,5 +1,6 @@
 import discord
 import asyncio
+import traceback
 import os
 from subprocess import Popen, check_output
 from random import choice
@@ -53,6 +54,11 @@ class ShrimpBot(discord.Client):
         self.logger = logger
 
         super().__init__()
+
+    async def on_error(self, event_method, *args, **kwargs):
+        exc_info = traceback.format_exc()
+        self.logger.error(exc_info)
+        await asyncio.sleep(0)
 
     async def on_ready(self):
         activity = discord.Activity(name="명령어: 새우야", type=discord.ActivityType.playing)
