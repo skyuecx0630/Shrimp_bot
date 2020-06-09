@@ -1,7 +1,6 @@
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import MetaData, Table, Column, Integer, String
 
-Base = declarative_base()
+from .base import Base
 
 
 class Custom_commands(Base):
@@ -20,4 +19,9 @@ class Custom_commands(Base):
         self.output = output
 
     def __repr__(self):
-        return "<Custom_commands %s %s %s>" % (self.server, self.command, self.output)
+        return "<custom_commands %s %s %s %s>" % (
+            self.server,
+            self.author,
+            self.command,
+            self.output,
+        )

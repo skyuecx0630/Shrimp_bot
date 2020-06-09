@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from os.path import join, exists
-from models import Custom_commands
+from models import Base, Custom_commands
 
 from const import Settings
 
@@ -11,8 +11,6 @@ from const import Settings
 class DBManager:
     def __init__(self):
         engine = create_engine(Settings.database)
-
-        from models import Base
 
         Base.metadata.create_all(engine)
 
