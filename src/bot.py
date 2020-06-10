@@ -1,4 +1,5 @@
 import discord
+from discord.ext.commands import Bot
 import asyncio
 import traceback
 import os
@@ -42,7 +43,7 @@ def guild_only(func):
     return wrapper
 
 
-class ShrimpBot(discord.Client):
+class ShrimpBot(Bot):
     def __init__(self, admin, logger):
         self.prefix = "새우야"
         self.color = 0xFF421A
@@ -53,7 +54,7 @@ class ShrimpBot(discord.Client):
         self.db_manager = DBManager()
         self.logger = logger
 
-        super().__init__()
+        super().__init__(self.prefix)
 
     async def on_error(self, event_method, *args, **kwargs):
         exc_info = traceback.format_exc()
