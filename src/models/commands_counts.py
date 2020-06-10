@@ -1,4 +1,6 @@
-from sqlalchemy import MetaData, Table, Column, Integer, String
+from sqlalchemy import MetaData, Table, Column, Integer, String, DateTime
+from datetime import datetime
+from pytz import timezone
 
 from .base import Base
 
@@ -9,11 +11,15 @@ class Command_counts(Base):
     id = Column(Integer, primary_key=True)
     server = Column(String(255))
     command = Column(String(255))
-    counts = Column(Integer)
+    created_at = Column(DateTime(), default=datetime.now(timezone("Asia/Seoul")))
 
-    def __init__(self, command, counts):
+    def __init__(self, server, command):
+        self.server = server
         self.command = command
-        self.counts = counts
 
     def __repr__(self):
-        return "<command_counts %s %s>" % (self.command, self.counts)
+        return "<command_counts %s %s %s>" % (
+            self.server,
+            self.command,
+            self.created_at,
+        )

@@ -9,7 +9,7 @@ from utils import TimeCalc, MenuParser
 from const import Constants, Docs, Strings, Settings
 from db_manager import DBManager
 
-from models import Custom_commands
+from models import Custom_commands, Command_counts
 
 
 weekday_kor = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
@@ -85,6 +85,9 @@ class ShrimpBot(discord.Client):
 
             if func:
                 await func(message)
+                await self.count_command(
+                    message, find_command(command, prefixed=prefixed)
+                )
 
             else:
                 await self.command_custom_show(message)
@@ -271,6 +274,13 @@ class ShrimpBot(discord.Client):
         em = discord.Embed(title=title, description=description, colour=self.color)
 
         await message.channel.send(embed=em)
+
+    @guild_only
+    async def count_command(self, message, command):
+        server = message.guild.id
+
+        self.db_manager.insert_row(Command_counts(server, command))
+        await asyncio.sleep(0)
 
     @admin_only
     async def command_get_update(self, message):
