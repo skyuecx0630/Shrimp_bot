@@ -283,6 +283,30 @@ class ShrimpBot(Bot):
         self.db_manager.insert_row(Command_counts(server, command))
         await asyncio.sleep(0)
 
+    @guild_only
+    async def command_statistic(self, message):
+        server = message.guild.id
+
+        records = self.db_manager.search_row(Command_counts, "server", server)
+
+        counts = {}
+
+        for record in records:
+            try:
+                counts[record.command] += 1
+            except KeyError:
+                counts[record.command] = 1
+
+        sort_by_count = sorted(counts.items(), key=(lambda x: x[1]), reverse=True)
+
+        description = "\n".join(
+            [f"{command} : {count}" for command, count in sort_by_count]
+        )
+
+        em = discord.Embed(title="서버 통계", description=description, colour=self.color)
+
+        await message.channel.send(embed=em)
+
     @admin_only
     async def command_get_update(self, message):
         result = check_output(
