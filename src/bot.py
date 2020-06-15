@@ -310,13 +310,20 @@ class ShrimpBot(Bot):
     @admin_only
     async def command_get_update(self, message):
         result = check_output(
-            ["git", "pull", "origin", "+master"], cwd=self.BASE_DIR
+            ["git", "pull", "origin", "+master"], cwd=self.BASE_DIR,
         ).decode("utf-8")
 
-        em = discord.Embed(title="명령어 실행 결과!", description=result, colour=self.color)
+        result += check_output(
+            ["pip3", "install", "-r", "../requirements.txt"], cwd=self.BASE_DIR
+        ).decode("utf-8")
 
         self.logger.info("Pulling updates...")
-        await message.author.send(embed=em)
+
+        for i in range(0, len(result), 2000):
+            em = discord.Embed(
+                title=f"명령어 실행 결과!", description=result[i : i + 2000], colour=self.color
+            )
+            await message.author.send(embed=em)
 
     @admin_only
     async def command_restart_bot(self, message):
