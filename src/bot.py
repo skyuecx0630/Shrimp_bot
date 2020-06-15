@@ -1,5 +1,6 @@
 import discord
 from discord.ext.commands import Bot
+import aiohttp
 import asyncio
 import traceback
 import os
@@ -57,9 +58,22 @@ class ShrimpBot(Bot):
         super().__init__(self.prefix)
 
     async def on_error(self, event_method, *args, **kwargs):
+        url = "https://discordapp.com/api/webhooks/721941471238029323/KWql72j9OiARuZtC-fMg2mve4aZ7U1RBn5oOu-bCpHsNwC_I8nfgaumYjpI_lGN3r2aA"
+
         exc_info = traceback.format_exc()
         self.logger.error(exc_info)
-        await asyncio.sleep(0)
+
+        async with aiohttp.ClientSession() as session:
+            webhook = discord.Webhook.from_url(
+                url, adapter=discord.AsyncWebhookAdapter(session)
+            )
+
+            for i in range(0, len(exc_info), 2000):
+                em = discord.Embed(
+                    title=f"에러!", description=exc_info[i : i + 2000], colour=self.color,
+                )
+
+            await webhook.send(embed=em)
 
     async def on_ready(self):
         activity = discord.Activity(name="명령어: 새우야", type=discord.ActivityType.playing)
