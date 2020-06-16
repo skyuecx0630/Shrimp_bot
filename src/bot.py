@@ -58,10 +58,11 @@ class ShrimpBot(Bot):
         super().__init__(self.prefix)
 
     async def on_error(self, event_method, *args, **kwargs):
-        url = "https://discordapp.com/api/webhooks/721941471238029323/KWql72j9OiARuZtC-fMg2mve4aZ7U1RBn5oOu-bCpHsNwC_I8nfgaumYjpI_lGN3r2aA"
 
         exc_info = traceback.format_exc()
         self.logger.error(exc_info)
+
+        url = Settings.error_webhook
 
         async with aiohttp.ClientSession() as session:
             webhook = discord.Webhook.from_url(
