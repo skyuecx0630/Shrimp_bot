@@ -94,10 +94,9 @@ class ShrimpBot(Bot):
                 return
 
             command = contents[prefixed]
+            command_found = find_command(command, prefixed=prefixed)
 
-            func = getattr(
-                self, "command_%s" % find_command(command, prefixed=prefixed), None
-            )
+            func = getattr(self, f"command_{command_found}", None)
 
             if func:
                 await func(message)
@@ -114,14 +113,14 @@ class ShrimpBot(Bot):
     async def command_help(self, message, command=None):
         await message.channel.trigger_typing()
 
-        msg = "<@!%d>" % message.author.id
+        msg = f"<@!{message.author.id}>"
 
         contents = message.content.lower().split()
         title = "새우 봇 도움말"
 
         if command:
             doc = getattr(Docs, find_command(command), None)
-            title += " - %s" % command
+            title += f" - {command}"
             msg += " 올바른 명령어가 아닙니다!"
 
         else:
@@ -129,7 +128,7 @@ class ShrimpBot(Bot):
                 doc = getattr(Docs, find_command(contents[2]), None)
 
                 if doc:
-                    title += " - %s" % contents[2]
+                    title += f" - {contents[2]}"
 
                 else:
                     doc = "그런 명령어는 없네요 :("
@@ -145,14 +144,9 @@ class ShrimpBot(Bot):
         await message.channel.trigger_typing()
 
         year, month, day, weekday, time = TimeCalc.get_next_time()
+        meal_time = ["아침", "점심", "저녁"][time]
 
-        title = "%s년 %s월 %s일 %s %s밥" % (
-            year,
-            month,
-            day,
-            weekday_kor[weekday],
-            ["아침", "점심", "저녁"][time],
-        )
+        title = f"{year}년 {month}월 {day}일 {weekday_kor[weekday]} {meal_time}밥"
 
         menu = self.meal_parser.get_next_meal()
 
@@ -284,8 +278,8 @@ class ShrimpBot(Bot):
             else:
                 command_dict[custom.command] = 1
 
-        title = "%s의 커맨드 목록" % message.guild.name
-        description = "\n".join(["`%s`" % command for command in command_dict])
+        title = f"{message.guild.name}의 커맨드 목록"
+        description = "\n".join([f"`{command}`" for command in command_dict])
 
         em = discord.Embed(title=title, description=description, colour=self.color)
 
