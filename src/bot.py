@@ -360,3 +360,8 @@ class ShrimpBot(Bot):
         em = discord.Embed(title="명령어 실행 결과!", description=result, colour=self.color)
 
         await message.author.send(embed=em)
+
+    @admin_only
+    async def command_flush_channel(self, message):
+        await message.channel.clone()
+        await message.channel.delete()

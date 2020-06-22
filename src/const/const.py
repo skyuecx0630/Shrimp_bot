@@ -10,6 +10,7 @@ class Constants:
         "get_update": ["업데이트"],
         "restart_bot": ["재시작"],
         "get_log": ["로그"],
+        "flush_channel": ["밀어버려"],
     }
 
     command = {
