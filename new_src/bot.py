@@ -8,6 +8,8 @@ from const import Settings
 from handlers import CommandFinder, get_logger
 from utils import Timer
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 
 class ShrimpBot(commands.Bot):
     def __init__(self, logger=None, **kwargs):
@@ -47,13 +49,3 @@ class ShrimpBot(commands.Bot):
 
             if func:
                 await func(message)
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-if __name__ == "__main__":
-    logger = get_logger("shrimp_bot")
-
-    bot = ShrimpBot(logger, owners_id=Settings.Owners)
-
-    bot.run(Settings.token)
