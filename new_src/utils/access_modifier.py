@@ -7,9 +7,9 @@ def owners_only(func):
     @wraps(func)
     async def wrapper(bot, message, *args, **kwargs):
         if message.author.id in Settings.Owners:
-            await func(bot, message, *args, **kwargs)
+            return await func(bot, message, *args, **kwargs)
         else:
-            await message.channel.send(Strings.OWNERS_ONLY)
+            return await message.channel.send(Strings.OWNERS_ONLY)
 
     return wrapper
 
@@ -17,9 +17,9 @@ def owners_only(func):
 def guild_only(func):
     @wraps(func)
     async def wrapper(bot, message, *args, **kwargs):
-        if message.author.id in Settings.Owners:
-            await func(bot, message, *args, **kwargs)
+        if message.guild:
+            return await func(bot, message, *args, **kwargs)
         else:
-            await message.channel.send(Strings.GUILD_ONLY)
+            return await message.channel.send(Strings.GUILD_ONLY)
 
     return wrapper
