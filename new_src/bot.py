@@ -48,4 +48,4 @@ class ShrimpBot(commands.Bot):
             func = CommandFinder().get_function_by_message(message)
 
             if func:
-                await func(message)
+                await func(self, message)
