@@ -15,6 +15,7 @@ class ShrimpBot(commands.Bot):
     def __init__(self, logger=None, **kwargs):
         self.color = 0xFF421A
         self.logger = logger
+        self.BASE_DIR = BASE_DIR
         super().__init__(command_prefix="", help_command=None, **kwargs)
 
     async def on_ready(self):

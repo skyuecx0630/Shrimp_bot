@@ -1,5 +1,6 @@
 class Strings:
-    ADMIN_ONLY = "이 기능은 봇 관리자만 사용할 수 있습니다!"
+    OWNERS_ONLY = "이 기능은 봇 관리자만 사용할 수 있습니다!"
+    GUILD_ONLY = "이 기능은 서버에서만 사용할 수 있습니다!"
     prefix_list = ["새우야"]
 
 
