@@ -7,10 +7,35 @@ from const import Aliases, ShortenedAliases, Strings
 BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 
 
+def get_class_name_by_file_name(file_name):
+    file_name = "".join(file_name.split(".")[:-1])  # 확장자 지우기
+    tokens = [token.capitalize() for token in file_name.split("_")]
+    return "".join(tokens)
+
+
 class CommandFinder:
     def __init__(self):
         self.prefix_list = Strings.prefix_list
         self.extensions = self.get_extensions()
+
+    def get_extensions(self):
+        extensions = os.listdir(os.path.join(BASE_DIR, "extensions"))
+
+        extension_list = []
+
+        for extension in extensions:
+            if extension.endswith(".py"):
+                module = importlib.import_module(
+                    "extensions." + extension[:-3], "extensions"
+                )
+
+                try:
+                    extension_list.append(
+                        getattr(module, get_class_name_by_file_name(extension))
+                    )
+                except AttributeError:
+                    continue
+        return extension_list
 
     def get_command(self, keyword: str, prefixed: bool) -> (str):
         """키워드로 커맨드의 이름을 찾습니다
@@ -31,22 +56,7 @@ class CommandFinder:
 
         return None
 
-    def get_extensions(self):
-        extensions = os.listdir(os.path.join(BASE_DIR, "extensions"))
-
-        extension_list = []
-
-        for extension in extensions:
-            if extension.endswith(".py"):
-                module = importlib.import_module(
-                    "extensions." + extension[:-3], "extensions"
-                )
-
-                extension_list.append(getattr(module, extension[:-3].capitalize()))
-
-        return extension_list
-
-    def get_function(self, keyword: str, prefixed: bool):
+    def get_function(self, keyword: str, prefixed: bool = False):
         command = self.get_command(keyword, prefixed)
 
         for extension in self.extensions:

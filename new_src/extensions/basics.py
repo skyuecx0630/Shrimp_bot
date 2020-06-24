@@ -3,7 +3,7 @@ from discord.ext import commands
 import asyncio
 
 from const import Docs
-from utils import TimeCalc, MenuParser
+from utils import TimeCalc, MenuParser, HelpDocument
 
 
 weekday_kor = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
@@ -26,7 +26,7 @@ class Basics:
 
             em = discord.Embed(title=title, description=menu, colour=bot.color)
 
-            await message.channel.send(embed=em)
+        await message.channel.send(embed=em)
 
     @staticmethod
     async def invite_link(bot, message):
@@ -42,7 +42,7 @@ class Basics:
                 colour=bot.color,
             )
 
-            msg = await message.channel.send(embed=em)
+        msg = await message.channel.send(embed=em)
 
         await asyncio.sleep(15)
 
@@ -50,3 +50,22 @@ class Basics:
             await msg.edit(content="새우가 도망갔어요!", suppress=True)
         except discord.errors.NotFound:
             pass
+
+    @staticmethod
+    async def help(bot, message, command=None):
+        async with message.channel.typing():
+            contents = message.content.lower().split()
+
+            title = "새우 봇 도움말"
+            msg = f"<@!{message.author.id}>"
+
+            try:
+                keyword = command if command else contents[2]
+            except IndexError:
+                keyword = None
+
+            doc = str(HelpDocument(bot.command_finder, keyword))
+
+            em = discord.Embed(title=title, description=doc, colour=bot.color)
+
+        await message.channel.send(msg, embed=em)

@@ -5,7 +5,7 @@ import traceback
 import aiohttp
 
 from const import Settings
-from handlers import CommandFinder, get_logger
+from handlers import CommandFinder, DBManager, get_logger
 from utils import Timer
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -16,6 +16,8 @@ class ShrimpBot(commands.Bot):
         self.color = 0xFF421A
         self.logger = logger
         self.BASE_DIR = BASE_DIR
+        self.command_finder = CommandFinder()
+        self.db_manager = DBManager()
         super().__init__(command_prefix="", help_command=None, **kwargs)
 
     async def on_ready(self):
@@ -46,7 +48,7 @@ class ShrimpBot(commands.Bot):
         contents = message.content.split()
 
         if not message.author.bot:
-            func = CommandFinder().get_function_by_message(message)
+            func = self.command_finder.get_function_by_message(message)
 
             if func:
                 await func(self, message)
