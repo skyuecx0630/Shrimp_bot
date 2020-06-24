@@ -30,8 +30,6 @@ class Owners:
     async def restart_bot(bot, message):
         file = os.path.join(bot.BASE_DIR, "run.py")
 
-        print(file)
-
         python = "python3" if os.name == "posix" else "python"
         Popen([python, file])
 
