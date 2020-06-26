@@ -56,8 +56,9 @@ class CommandFinder:
 
         return None
 
-    def get_function(self, keyword: str, prefixed: bool = False):
-        command = self.get_command(keyword, prefixed)
+    def get_function(self, keyword: str, prefixed: bool = False, command: str = None):
+        if command is None:
+            command = self.get_command(keyword, prefixed)
 
         for extension in self.extensions:
             try:
