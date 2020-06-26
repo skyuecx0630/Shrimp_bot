@@ -50,5 +50,7 @@ class ShrimpBot(commands.Bot):
         if not message.author.bot:
             func = self.command_finder.get_function_by_message(message)
 
-            if func:
-                await func(self, message)
+            if func is None:
+                func = self.command_finder.get_function(None, command="custom_show")
+
+            await func(self, message)
