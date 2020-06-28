@@ -1,5 +1,5 @@
 class Docs:
-    helps = """
+    default = """
 :shrimp:새우 봇의 명령어 입니다!
 새우야 도움말 <명령어>로 상세히 볼 수 있습니다!
 

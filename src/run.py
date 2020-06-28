@@ -1,11 +1,12 @@
-from bot import ShrimpBot
-from utils import Timer
+from handlers import get_logger
 from const import Settings
-from logger import get_logger
 
-timer = Timer()
-logger = get_logger("shrimp_bot")
+from bot import ShrimpBot
 
-ShrimpBot(admin=Settings.Admins, logger=logger).run(Settings.token)
 
-logger.info("Run time - %dh : %dm : %ds" % timer.end())
+if __name__ == "__main__":
+    logger = get_logger("shrimp_bot")
+
+    bot = ShrimpBot(logger)
+
+    bot.run(Settings.token)
