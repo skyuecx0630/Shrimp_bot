@@ -47,7 +47,7 @@ class ShrimpBot(commands.Bot):
         await self.wait_until_ready()
         contents = message.content.split()
 
-        if not message.author.bot:
+        if not message.author.bot and contents:
             func = self.command_finder.get_function_by_message(message)
 
             if func is None:
