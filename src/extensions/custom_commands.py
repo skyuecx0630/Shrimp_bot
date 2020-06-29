@@ -8,6 +8,7 @@ from models import Custom_commands
 
 class CustomCommands:
     @staticmethod
+    @guild_only
     async def custom(bot, message):
         contents = message.content.split()
 
@@ -15,13 +16,14 @@ class CustomCommands:
 
         try:
             await getattr(CustomCommands, "custom_" + features[contents[2]])(
-                message, prefixed=True
+                bot, message, prefixed=True
             )
 
         except (IndexError, KeyError):
             await Basics.help(bot, message, command="커맨드")
 
     @staticmethod
+    @guild_only
     async def custom_add(bot, message, prefixed=False):
         contents = message.content.split()
         command_index = 3 if prefixed else 1
@@ -50,6 +52,7 @@ class CustomCommands:
             await message.add_reaction("\U0001F44C")
 
     @staticmethod
+    @guild_only
     async def custom_show(bot, message):
         contents = message.content.split()
 
@@ -64,6 +67,7 @@ class CustomCommands:
             await message.channel.send(selected.output)
 
     @staticmethod
+    @guild_only
     async def custom_delete(bot, message, prefixed=False):
         contents = message.content.split()
 
@@ -92,6 +96,7 @@ class CustomCommands:
                 await message.add_reaction("\U0001F44C")
 
     @staticmethod
+    @guild_only
     async def custom_list(bot, message, prefixed=False):
         await message.channel.trigger_typing()
 
