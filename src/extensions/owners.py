@@ -3,21 +3,19 @@ import discord
 from subprocess import Popen, check_output
 
 from utils import owners_only
+from const import UpdateCommands
 
 
 class Owners:
     @staticmethod
     @owners_only
     async def get_update(bot, message):
-        result = check_output(
-            ["git", "pull", "origin", "+master"], cwd=bot.BASE_DIR,
-        ).decode("utf-8")
-
-        result += check_output(
-            ["pip3", "install", "-r", "../requirements.txt"], cwd=bot.BASE_DIR
-        ).decode("utf-8")
-
         bot.logger.info("Pulling updates...")
+
+        result = ""
+
+        for command in UpdateCommands:
+            result += check_output(command, cwd=bot.BASE_DIR).decode("utf-8")
 
         for i in range(0, len(result), 2000):
             em = discord.Embed(

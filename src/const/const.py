@@ -25,3 +25,9 @@ Aliases = {
     "get_log": ["로그"],
     "flush_channel": ["밀어버려"],
 }
+
+UpdateCommands = [
+    ["git", "reset", "--hard", "origin/master"],
+    ["git", "pull", "origin", "+master"],
+    ["pip3", "install", "-r", "../requirements.txt"],
+]
