@@ -21,7 +21,7 @@ class ShrimpBot(commands.Bot):
         super().__init__(command_prefix="", help_command=None, **kwargs)
 
     async def on_ready(self):
-        activity = discord.CustomActivity(name="새우야 도움말")
+        activity = discord.Game(name="새우야 도움말")
         await self.change_presence(activity=activity)
         self.logger.info("Bot Started!")
 
