@@ -5,7 +5,7 @@ import os
 class Setting:
     LEVEL = logging.DEBUG
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    FILE_NAME = os.path.join(BASE_DIR, "shrimp_bot.log")
+    FILE_NAME = os.path.join(BASE_DIR, "..", "shrimp_bot.log")
     FORMAT = "[%(asctime)s][%(levelname)s|%(filename)s:%(lineno)s] >> %(message)s"
 
 
