@@ -46,11 +46,16 @@ class ShrimpBot(commands.Bot):
     async def on_message(self, message: discord.Message):
         await self.wait_until_ready()
         contents = message.content.split()
+        author = message.author
 
         if not message.author.bot and contents:
             func = self.command_finder.get_function_by_message(message)
 
-            if func is None:
+            if func:
+                self.logger.info(
+                    f"{author.name}#{author.discriminator} : {message.content}"
+                )
+            else:
                 func = self.command_finder.get_function(None, command="custom_show")
 
             await func(self, message)
