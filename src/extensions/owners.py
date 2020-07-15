@@ -51,9 +51,3 @@ class Owners:
         em = discord.Embed(title="명령어 실행 결과!", description=result, colour=bot.color)
 
         await message.author.send(embed=em)
-
-    @staticmethod
-    @owners_only
-    async def flush_channel(bot, message):
-        await message.channel.clone()
-        await message.channel.delete()

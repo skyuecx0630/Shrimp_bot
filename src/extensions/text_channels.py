@@ -23,3 +23,10 @@ class TextChannels:
             limit=messages_to_delete + 1, check=lambda m: m.id != message.id
         )
         await message.channel.send(f"{len(deleted)}개의 메세지를 지웠어요!")
+
+    @staticmethod
+    @guild_only
+    @has_permissions("manage_channels")
+    async def flush_channel(bot, message):
+        await message.channel.clone()
+        await message.channel.delete()
