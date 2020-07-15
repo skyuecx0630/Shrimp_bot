@@ -1,6 +1,7 @@
 class Strings:
     OWNERS_ONLY = "이 기능은 봇 관리자만 사용할 수 있습니다!"
     GUILD_ONLY = "이 기능은 서버에서만 사용할 수 있습니다!"
+    INTEGER_ONLY = "숫자를 입력해 주세요!"
     prefix_list = ["새우야"]
 
 
@@ -24,6 +25,7 @@ Aliases = {
     "restart_bot": ["재시작"],
     "get_log": ["로그"],
     "flush_channel": ["밀어버려"],
+    "clean_messages": ["청소"],
 }
 
 UpdateCommands = [
