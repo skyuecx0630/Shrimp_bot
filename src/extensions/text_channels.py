@@ -1,10 +1,13 @@
 import discord
 
 from const import Strings
+from utils.access_modifier import has_permissions, guild_only
 
 
 class TextChannels:
     @staticmethod
+    @guild_only
+    @has_permissions("manage_messages")
     async def clean_messages(bot, message: discord.Message):
         contents = message.content.split()
         messages_to_delete = 10
