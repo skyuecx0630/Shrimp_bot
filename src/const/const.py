@@ -20,8 +20,6 @@ Aliases = {
     "invite_link": ["초대"],
     "help": ["help", "도움말", "명령어"],
     "custom": ["커맨드", "커스텀"],
-    "statistic": ["통계"],
-    "ban_word": ["금지어"],
     "get_update": ["업데이트"],
     "restart_bot": ["재시작"],
     "get_log": ["로그"],
