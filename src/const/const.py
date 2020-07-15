@@ -2,6 +2,7 @@ class Strings:
     OWNERS_ONLY = "이 기능은 봇 관리자만 사용할 수 있습니다!"
     GUILD_ONLY = "이 기능은 서버에서만 사용할 수 있습니다!"
     INTEGER_ONLY = "숫자를 입력해 주세요!"
+    NO_PERMISSIONS = "이 기능을 사용할 권한이 없습니다!"
     prefix_list = ["새우야"]
 
 
