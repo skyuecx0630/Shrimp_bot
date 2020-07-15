@@ -15,7 +15,7 @@ class TextChannels:
         if len(contents) > 2:
             try:
                 messages_to_delete = int(contents[2])
-            except (TypeError):
+            except (ValueError):
                 await message.channel.send(Strings.INTEGER_ONLY)
                 return
 
