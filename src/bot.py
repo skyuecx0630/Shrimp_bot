@@ -51,11 +51,14 @@ class ShrimpBot(commands.Bot):
         if not message.author.bot and contents:
             func = self.command_finder.get_function_by_message(message)
 
-            if func:
+            if func is None:
+                if message.guild is None:
+                    return
+
+                func = self.command_finder.get_function(None, command="custom_show")
+            else:
                 self.logger.info(
                     f"{author.name}#{author.discriminator} : {message.content}"
                 )
-            else:
-                func = self.command_finder.get_function(None, command="custom_show")
 
             await func(self, message)
