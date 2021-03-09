@@ -28,7 +28,7 @@ Aliases = {
 }
 
 UpdateCommands = [
-    ["git", "reset", "--hard", "origin/master"],
-    ["git", "pull", "origin", "+master"],
+    ["git", "reset", "--hard", "origin/main"],
+    ["git", "pull", "origin", "+main"],
     ["pip3", "install", "-r", "../requirements.txt"],
 ]
